@@ -1,0 +1,22 @@
+BÁO CÁO KẾT QUẢ THỦY VÂN WU-LEE
+===============================
+
+Ảnh gốc: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/cover.png - 2912x1632 pixels
+Ảnh thủy vân: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/watermark.jpg - 300x100 pixels
+
+THÔNG SỐ THUẬT TOÁN
+- Kích thước khối: 8x8
+- Khóa bí mật: 77337
+- Alpha: 5.0
+- Tỷ lệ bit 1 trong K: 65.62%
+- Số khối ảnh: 74256
+- Ước tính dung lượng nhúng: 51979 bits
+
+KẾT QUẢ
+- Số bit đã nhúng thành công: 30000/30000 (100.00%)
+- Thời gian nhúng thủy vân: 0.398 giây
+- Thời gian trích xuất thủy vân: 0.258 giây
+- PSNR: 71.17 dB
+- Số pixel đã sửa đổi: 23618/4752384 (0.4970%)
+- Độ chính xác trích xuất: 89.33% (3200 bit lỗi)
+- Tỷ lệ lỗi bit (BER): 0.106667

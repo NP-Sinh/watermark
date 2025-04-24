@@ -52,7 +52,7 @@ Quy trình thực hiện:
    - Nếu d=0: không cần sửa đổi
    - Nếu d≠0: thay đổi 1-2 bit phù hợp trong khối để S'=b
 
-"Quá trình trích xuất thủy vân" 
+### 3.Quá trình trích xuất thủy vân 
 1. Chia ảnh đã nhúng thành các khối m×n
 2. Với mỗi khối F':
    - Tính T' = F' ⊕ K

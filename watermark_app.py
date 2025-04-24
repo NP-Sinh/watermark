@@ -7,12 +7,17 @@ import cv2
 import numpy as np
 from io import StringIO
 import re
+import threading
+import time
+import matplotlib.pyplot as plt
 
-# Import phương pháp
-from pct_watermark import PCTWatermark, apply_watermark_to_files as apply_pct_watermark
-from wu_lee_watermark import WuLeeWatermark, apply_watermark_to_files as apply_wulee_watermark, load_binary_image, save_binary_image
-from sw_watermark import SWWatermark, apply_watermark_to_files as apply_sw_watermark, load_binary_image, save_binary_image
-
+# Import watermarking algorithms
+from pct_watermark import apply_watermark_to_files as apply_pct_watermark
+from wu_lee_watermark import apply_watermark_to_files as apply_wulee_watermark
+from sw_watermark import apply_watermark_to_files as apply_sw_watermark
+from lsb_watermark import apply_watermark_to_files as apply_lsb_watermark
+from dwt_watermark import apply_watermark_to_files as apply_dwt_watermark
+from dct_watermark import apply_watermark_to_files as apply_dct_watermark
 
 class WatermarkApp:
     def __init__(self, root):
@@ -28,6 +33,12 @@ class WatermarkApp:
             os.makedirs("WU_LEE")
         if not os.path.exists("SW"):
             os.makedirs("SW")
+        if not os.path.exists("LSB"):
+            os.makedirs("LSB")
+        if not os.path.exists("DWT"):
+            os.makedirs("DWT")
+        if not os.path.exists("DCT"):
+            os.makedirs("DCT")
         
         # Variables
         self.algorithm = tk.StringVar(value="PCT")
@@ -49,6 +60,18 @@ class WatermarkApp:
         self.sw_block_size_m = tk.IntVar(value=8)
         self.sw_block_size_n = tk.IntVar(value=8)
         
+        # LSB parameters
+        self.lsb_block_size_m = tk.IntVar(value=8)
+        self.lsb_block_size_n = tk.IntVar(value=8)
+        
+        # DWT parameters
+        self.dwt_decomposition_level = tk.IntVar(value=2)
+        self.dwt_quantization_step = tk.IntVar(value=35)
+        
+        # DCT parameters
+        self.dct_block_size = tk.IntVar(value=8)
+        self.dct_k_factor = tk.IntVar(value=20)
+        
         # Image variables
         self.cover_img = None
         self.watermark_img = None
@@ -69,7 +92,7 @@ class WatermarkApp:
         
         # Algorithm selection
         ttk.Label(control_frame, text="Chọn thuật toán:").grid(row=0, column=0, sticky=tk.W, pady=5)
-        algorithms = ["PCT", "Wu-Lee", "SW"]
+        algorithms = ["PCT", "Wu-Lee", "SW", "LSB", "DWT", "DCT"]
         algorithm_dropdown = ttk.Combobox(control_frame, textvariable=self.algorithm, values=algorithms, state="readonly", width=28)
         algorithm_dropdown.grid(row=0, column=1, columnspan=2, sticky=tk.W, pady=5)
         algorithm_dropdown.bind("<<ComboboxSelected>>", self.on_algorithm_change)
@@ -247,6 +270,36 @@ class WatermarkApp:
         ttk.Spinbox(block_size_frame, from_=2, to=64, textvariable=self.sw_block_size_m, width=3).pack(side=tk.LEFT)
         ttk.Label(block_size_frame, text="×").pack(side=tk.LEFT, padx=5)
         ttk.Spinbox(block_size_frame, from_=2, to=64, textvariable=self.sw_block_size_n, width=3).pack(side=tk.LEFT)
+    
+    def create_lsb_params(self):
+        # Clear current parameters
+        for widget in self.params_frame.winfo_children():
+            widget.destroy()
+            
+        ttk.Label(self.params_frame, text="Khóa bí mật:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        ttk.Spinbox(self.params_frame, from_=1, to=999999, textvariable=self.secret_key, width=8).grid(row=0, column=1, sticky=tk.W, pady=5)
+
+    def create_dwt_params(self):
+        # Clear current parameters
+        for widget in self.params_frame.winfo_children():
+            widget.destroy()
+            
+        ttk.Label(self.params_frame, text="Mức phân giải:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        ttk.Spinbox(self.params_frame, from_=1, to=4, textvariable=self.dwt_decomposition_level, width=3).grid(row=0, column=1, sticky=tk.W, pady=5)
+        
+        ttk.Label(self.params_frame, text="Bước lượng tử (Q):").grid(row=1, column=0, sticky=tk.W, pady=5)
+        ttk.Spinbox(self.params_frame, from_=5, to=100, textvariable=self.dwt_quantization_step, width=3).grid(row=1, column=1, sticky=tk.W, pady=5)
+
+    def create_dct_params(self):
+        # Clear current parameters
+        for widget in self.params_frame.winfo_children():
+            widget.destroy()
+            
+        ttk.Label(self.params_frame, text="Kích thước khối:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        ttk.Spinbox(self.params_frame, from_=8, to=16, textvariable=self.dct_block_size, width=3).grid(row=0, column=1, sticky=tk.W, pady=5)
+        
+        ttk.Label(self.params_frame, text="Hệ số k:").grid(row=1, column=0, sticky=tk.W, pady=5)
+        ttk.Spinbox(self.params_frame, from_=5, to=50, textvariable=self.dct_k_factor, width=3).grid(row=1, column=1, sticky=tk.W, pady=5)
         
     def on_algorithm_change(self, event=None):
         algorithm = self.algorithm.get()
@@ -256,6 +309,12 @@ class WatermarkApp:
             self.create_wulee_params()
         elif algorithm == "SW":
             self.create_sw_params()
+        elif algorithm == "LSB":
+            self.create_lsb_params()
+        elif algorithm == "DWT":
+            self.create_dwt_params()
+        elif algorithm == "DCT":
+            self.create_dct_params()
             
     def browse_cover(self):
         file_path = filedialog.askopenfilename(
@@ -404,7 +463,7 @@ class WatermarkApp:
                 
                 # Đọc file báo cáo nếu có để cập nhật kết quả
                 report_path = "PCT/bao_cao_ket_qua.txt"
-                
+            
             elif algorithm == "Wu-Lee":
                 output_path = "WU_LEE/ket_qua_thuy_van.png"
                 os.makedirs("WU_LEE", exist_ok=True)
@@ -453,7 +512,7 @@ class WatermarkApp:
                 
                 # Đọc file báo cáo nếu có để cập nhật kết quả
                 report_path = "WU_LEE/bao_cao_ket_qua.txt"
-                
+            
             elif algorithm == "SW":
                 output_path = "SW/ket_qua_thuy_van.png"
                 os.makedirs("SW", exist_ok=True)
@@ -500,6 +559,146 @@ class WatermarkApp:
                 
                 # Đọc file báo cáo nếu có để cập nhật kết quả
                 report_path = "SW/bao_cao_ket_qua.txt"
+            
+            elif algorithm == "LSB":
+                output_path = "LSB/ket_qua_thuy_van.png"
+                os.makedirs("LSB", exist_ok=True)
+                
+                # Capture console output
+                original_stdout = sys.stdout
+                captured_output = StringIO()
+                sys.stdout = captured_output
+                
+                self.progress_var.set(30)
+                self.root.update_idletasks()
+                
+                # Apply LSB watermark - thêm tham số khóa bí mật
+                result = apply_lsb_watermark(
+                    cover_path=cover_path,
+                    watermark_path=watermark_path,
+                    output_path=output_path,
+                    secret_key=self.secret_key.get()
+                )
+                
+                # Restore stdout
+                sys.stdout = original_stdout
+                
+                # Load captured output
+                log_text = captured_output.getvalue()
+                
+                # Update the report tab with the log
+                self.report_text.delete(1.0, tk.END)
+                self.report_text.insert(tk.END, log_text)
+                
+                # Update result values from dictionary
+                if isinstance(result, dict):
+                    self.psnr_var.set(f"{result.get('psnr', 0):.2f} dB")
+                    self.embed_time_var.set(f"{result.get('embed_time', 0):.3f} giây")
+                    self.extract_time_var.set(f"{result.get('extract_time', 0):.3f} giây")
+                    
+                    total_pixels = result.get('total_pixels', 0)
+                    modified_pixels = result.get('modified_pixels', 0)
+                    percent = (modified_pixels / total_pixels * 100) if total_pixels > 0 else 0
+                    self.modified_pixels_var.set(f"{modified_pixels}/{total_pixels} ({percent:.4f}%)")
+                    
+                    self.accuracy_var.set(f"{result.get('accuracy', 0):.2f}%")
+                
+                # Đọc file báo cáo nếu có để cập nhật kết quả
+                report_path = "LSB/bao_cao_ket_qua.txt"
+            
+            elif algorithm == "DWT":
+                output_path = "DWT/ket_qua_thuy_van.png"
+                os.makedirs("DWT", exist_ok=True)
+                
+                # Capture console output
+                original_stdout = sys.stdout
+                captured_output = StringIO()
+                sys.stdout = captured_output
+                
+                self.progress_var.set(30)
+                self.root.update_idletasks()
+                
+                # Apply DWT watermark
+                result = apply_dwt_watermark(
+                    cover_path=cover_path,
+                    watermark_path=watermark_path,
+                    output_path=output_path,
+                    decomposition_level=self.dwt_decomposition_level.get(),
+                    quantization_step=self.dwt_quantization_step.get()
+                )
+                
+                # Restore stdout
+                sys.stdout = original_stdout
+                
+                # Load captured output
+                log_text = captured_output.getvalue()
+                
+                # Update the report tab with the log
+                self.report_text.delete(1.0, tk.END)
+                self.report_text.insert(tk.END, log_text)
+                
+                # Update result values from dictionary
+                if isinstance(result, dict):
+                    self.psnr_var.set(f"{result.get('psnr', 0):.2f} dB")
+                    self.embed_time_var.set(f"{result.get('embed_time', 0):.3f} giây")
+                    self.extract_time_var.set(f"{result.get('extract_time', 0):.3f} giây")
+                    
+                    total_pixels = result.get('total_pixels', 0)
+                    modified_pixels = result.get('modified_pixels', 0)
+                    percent = (modified_pixels / total_pixels * 100) if total_pixels > 0 else 0
+                    self.modified_pixels_var.set(f"{modified_pixels}/{total_pixels} ({percent:.4f}%)")
+                    
+                    self.accuracy_var.set(f"{result.get('accuracy', 0):.2f}%")
+                
+                # Đọc file báo cáo nếu có để cập nhật kết quả
+                report_path = "DWT/bao_cao_ket_qua.txt"
+            
+            elif algorithm == "DCT":
+                output_path = "DCT/ket_qua_thuy_van.png"
+                os.makedirs("DCT", exist_ok=True)
+                
+                # Capture console output
+                original_stdout = sys.stdout
+                captured_output = StringIO()
+                sys.stdout = captured_output
+                
+                self.progress_var.set(30)
+                self.root.update_idletasks()
+                
+                # Apply DCT watermark
+                result = apply_dct_watermark(
+                    cover_path=cover_path,
+                    watermark_path=watermark_path,
+                    output_path=output_path,
+                    block_size=self.dct_block_size.get(),
+                    k_factor=self.dct_k_factor.get()
+                )
+                
+                # Restore stdout
+                sys.stdout = original_stdout
+                
+                # Load captured output
+                log_text = captured_output.getvalue()
+                
+                # Update the report tab with the log
+                self.report_text.delete(1.0, tk.END)
+                self.report_text.insert(tk.END, log_text)
+                
+                # Update result values from dictionary
+                if isinstance(result, dict):
+                    self.psnr_var.set(f"{result.get('psnr', 0):.2f} dB")
+                    self.embed_time_var.set(f"{result.get('embed_time', 0):.3f} giây")
+                    self.extract_time_var.set(f"{result.get('extract_time', 0):.3f} giây")
+                    
+                    total_pixels = result.get('total_pixels', 0)
+                    modified_pixels = result.get('modified_pixels', 0)
+                    percent = (modified_pixels / total_pixels * 100) if total_pixels > 0 else 0
+                    self.modified_pixels_var.set(f"{modified_pixels}/{total_pixels} ({percent:.4f}%)")
+                    
+                    self.accuracy_var.set(f"{result.get('accuracy', 0):.2f}%")
+                
+                # Đọc file báo cáo nếu có để cập nhật kết quả
+                report_path = "DCT/bao_cao_ket_qua.txt"
             
             # Đọc và hiển thị báo cáo nếu tồn tại
             if os.path.exists(report_path):
@@ -565,7 +764,20 @@ class WatermarkApp:
     def extract_watermark(self):
         algorithm = self.algorithm.get()
         
-        output_folder = "PCT" if algorithm == "PCT" else ("WU_LEE" if algorithm == "Wu-Lee" else "SW")
+        output_folder = ""
+        if algorithm == "PCT":
+            output_folder = "PCT"
+        elif algorithm == "Wu-Lee":
+            output_folder = "WU_LEE"
+        elif algorithm == "SW":
+            output_folder = "SW"
+        elif algorithm == "LSB":
+            output_folder = "LSB"
+        elif algorithm == "DWT":
+            output_folder = "DWT"
+        elif algorithm == "DCT":
+            output_folder = "DCT"
+            
         output_path = f"{output_folder}/ket_qua_thuy_van.png"
         
         # Check if there's a watermarked image
@@ -587,6 +799,15 @@ class WatermarkApp:
                 # Load and display extracted watermark
                 self.extracted_watermark = cv2.imread(extracted_path)
                 self.display_image(self.extracted_watermark, self.extracted_canvas)
+                
+                # For DCT algorithm, also show original watermark if available
+                if algorithm == "DCT":
+                    original_watermark_path = f"{output_folder}/thuy_van_goc.png"
+                    if os.path.exists(original_watermark_path):
+                        original_watermark = cv2.imread(original_watermark_path)
+                        if self.watermark_img is None:
+                            self.watermark_img = original_watermark
+                            self.display_image(self.watermark_img, self.watermark_canvas)
                 
                 # Load report file if it exists
                 report_path = f"{output_folder}/bao_cao_ket_qua.txt"

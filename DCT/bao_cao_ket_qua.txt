@@ -1,0 +1,33 @@
+BÁO CÁO KẾT QUẢ THỦY VÂN DCT
+===============================
+
+THÔNG TIN ĐẦU VÀO
+-----------------
+- Ảnh gốc: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/cover.png - 2912x1632 pixels
+- Thủy vân: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/watermark.jpg - 300x100 pixels
+- Số bit cần nhúng: 30000
+
+THÔNG SỐ THUẬT TOÁN
+-----------------
+- Kích thước khối: 8x8
+- Hệ số k: 40
+- Vị trí hệ số 1: (4, 3)
+- Vị trí hệ số 2: (3, 4)
+
+KẾT QUẢ
+-------
+- Ảnh thủy vân: DCT/ket_qua_thuy_van.png
+- Ảnh thủy vân trích xuất: DCT\thuy_van_trich_xuat.png
+- Số khối đã nhúng: 30000/469
+- Số bit đã nhúng: 30000/30000
+- Số pixel đã sửa đổi: 1564358/4752384 (32.9173%)
+- PSNR: 39.04 dB
+- Độ chính xác trích xuất: 72.82% (8154 bit lỗi)
+
+HIỆU SUẤT
+--------
+- Thời gian nhúng: 1.225 giây
+- Thời gian trích xuất: 0.255 giây
+- Tổng thời gian: 1.856 giây
+
+===============================

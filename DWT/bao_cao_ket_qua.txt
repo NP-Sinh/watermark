@@ -1,0 +1,28 @@
+
+Báo cáo kết quả nhúng thủy vân DWT
+===================================
+
+Thông tin đầu vào:
+- Ảnh gốc: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/cover.png
+- Kích thước ảnh: 2912x1632 pixels
+- Thủy vân: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/watermark.jpg
+- Kích thước thủy vân: 300x100 pixels
+
+Tham số:
+- Mức phân giải Wavelet: 2
+- Kích thước bước lượng tử (Q): 35
+- Số khối nhúng: 8
+
+Kết quả:
+- Ảnh đã nhúng thủy vân: DWT/ket_qua_thuy_van.png
+- PSNR: 38.87 dB
+- Số pixel đã sửa đổi: 239967/297024 (80.7904%)
+- Thủy vân trích xuất: DWT\thuy_van_trich_xuat.png
+- Độ tương đồng cấu trúc (SSIM): 1.0000
+- Độ chính xác trích xuất: 100.00%
+
+Hiệu suất:
+- Thời gian nhúng thủy vân: 0.403760 giây
+- Thời gian trích xuất thủy vân: 0.174253 giây
+
+===================================

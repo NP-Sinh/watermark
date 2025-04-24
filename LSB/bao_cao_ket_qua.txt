@@ -1,0 +1,32 @@
+
+Báo cáo kết quả nhúng thủy vân LSB
+===================================
+
+Thông tin đầu vào:
+- Ảnh gốc: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/cover.png
+- Kích thước ảnh: 2912x1632 pixels
+- Thủy vân: Ảnh thủy vân
+- Loại thủy vân: Ảnh
+- Khóa bí mật: 77337
+
+Thống kê quá trình nhúng:
+- Cờ đảo bit: 0
+- Tổng số bit thủy vân: 173440
+- Phân bố bit trong thông điệp gốc: 120114 bit 0, 53326 bit 1
+- Phân bố LSB trong ảnh gốc: 86827 bit 0, 86613 bit 1
+
+Kết quả:
+- Ảnh đã nhúng thủy vân: LSB/ket_qua_thuy_van.png
+- PSNR: 70.30 dB
+- Số pixel đã sửa đổi: 86445/4752384 (1.8190%)
+
+Trích xuất thủy vân:
+- Thủy vân trích xuất: Ảnh (đã lưu tại LSB\thuy_van_trich_xuat.png, độ tương đồng: 1.00)
+- Loại thủy vân trích xuất: Ảnh
+- Độ chính xác trích xuất: 100.00% (0 bit lỗi)
+
+Hiệu suất:
+- Thời gian nhúng thủy vân: 1.338021 giây
+- Thời gian trích xuất thủy vân: 1.290612 giây
+
+===================================

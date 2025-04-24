@@ -16,6 +16,14 @@ pip install -r requirements.txt
 ```bash
 python watermark_app.py
 ```
+
+## 🏷️ Các thuật toán được cài đặt
+Ứng dụng này cài đặt 4 thuật toán thủy vân khác nhau:
+- PCT (Parity-Check-Based Technique)
+- Wu-Lee
+- SW (Simple Watermarking)
+- LSB (Least Significant Bit)
+
 ## 🏷️Thuật toán PCT
 Giải thích Thuật toán PCT
 ```bash
@@ -33,56 +41,58 @@ Thuật toán PCT là phương pháp giấu thông tin vào ảnh nhị phân (�
 
 Cốt lõi của thuật toán là tìm cách thay đổi ít nhất các điểm ảnh mà vẫn đảm bảo giấu được đủ thông tin cần thiết, đồng thời cho phép khôi phục chính xác thông tin đã giấu.
 ```
-Quy trình thực hiện:
+
+## 🏷️Thuật toán LSB (Least Significant Bit)
 ```bash
-### 1. Quá trình khởi tạo
-- Thuật toán sử dụng các tham số: kích thước khối (m×n) và số bit r cần giấu trong mỗi khối
-- Ràng buộc: 2^r - 1 ≤ m×n
-- Tạo ma trận khóa K (nhị phân kích thước m×n) ngẫu nhiên
-- Tạo ma trận trọng số W (m×n) với các giá trị thuộc {1, 2, ..., 2^r-1}
+Thuật toán LSB là phương pháp giấu thông tin vào bit ít quan trọng nhất của mỗi pixel trong ảnh.
 
-### 2. Quá trình nhúng thủy vân
-1. Chia ảnh gốc thành các khối kích thước m×n
-2. Chuyển đổi thông điệp cần nhúng thành các đoạn r-bit
-3. Với mỗi khối F:
-   - Tính T = F ⊕ K (XOR giữa khối và khóa)
-   - Tính S = ∑(T×W) mod 2^r (tổng có trọng số)
-   - Xây dựng các tập Z chứa các vị trí có thể thay đổi 
-   - Tính d = b - S mod 2^r (b là giá trị thập phân của r-bit cần nhúng)
-   - Nếu d=0: không cần sửa đổi
-   - Nếu d≠0: thay đổi 1-2 bit phù hợp trong khối để S'=b
+## Mục đích
+- Giấu thông tin (văn bản, hình ảnh) trong ảnh mà không gây thay đổi nhìn thấy được
+- Tận dụng sự thiếu nhạy cảm của mắt người với những thay đổi nhỏ trong giá trị màu sắc
 
-### 3.Quá trình trích xuất thủy vân 
-1. Chia ảnh đã nhúng thành các khối m×n
-2. Với mỗi khối F':
-   - Tính T' = F' ⊕ K
-   - Tính S' = ∑(T'×W) mod 2^r
-   - Chuyển S' thành biểu diễn nhị phân để tạo r-bit trích xuất
+## Cách hoạt động
+1. "Phân tích bit": Dựa trên tần suất xuất hiện của bit 0 và 1 trong ảnh gốc và thông điệp
+2. "Đặt cờ": Xác định xem có cần đảo bit thông điệp hay không trước khi nhúng
+3. "Nhúng thông tin": Thay đổi bit cuối cùng (LSB) của từng byte màu (thường là kênh Blue) trong ảnh
+4. "Đánh dấu EOF": Sử dụng marker để xác định kết thúc thông điệp khi trích xuất
 
-### 4. Các bước xử lý tổng thể
-1. Đọc và xử lý ảnh gốc:
-   - Chuyển thành ảnh nhị phân (0-1)
-   - Điều chỉnh kích thước thành bội số của m×n
-2. Đọc và xử lý ảnh thủy vân:
-   - Chuyển thành dãy bit
-   - Cắt bớt nếu dài hơn dung lượng có thể nhúng
-3. Thực hiện nhúng thủy vân
-4. Đánh giá kết quả:
-   - PSNR (Peak Signal-to-Noise Ratio)
-   - Số pixel đã thay đổi
-   - Thời gian xử lý
-5. Trích xuất và đánh giá độ chính xác:
-   - Tỷ lệ bit lỗi (BER)
-   - Độ chính xác phục hồi
+## Ưu điểm
+- Đơn giản, dễ cài đặt
+- Khả năng giấu lượng thông tin lớn (có thể lên đến 1/8 kích thước ảnh)
+- Thay đổi rất nhỏ về mặt thị giác (PSNR cao)
 
-Thuật toán này đảm bảo khả năng trích xuất thủy vân mà không cần ảnh gốc, thông qua việc sử dụng các ma trận khóa K và ma trận trọng số W.
+## Hạn chế
+- Dễ bị phát hiện bằng phân tích thống kê
+- Không chống được với nén mất dữ liệu (JPEG, ...)
+- Không chống được với các biến đổi hình học (xoay, cắt, ...)
 
+Đây là thuật toán cơ bản, nhưng hiệu quả cho các ứng dụng steganography đơn giản. Tuy nhiên, trong môi trường thực, thường cần kết hợp với các phương pháp khác để tăng tính bảo mật.
 ```
+
 ## 🏷️Thuật toán SW
-```bash
-python watermark_app.py
-```
+
 ## 🏷️Thuật toán WU-LEE
-```bash
-python watermark_app.py
-```
+
+## Các chức năng của ứng dụng
+1. **Nhúng thủy vân**:
+   - Chọn ảnh gốc
+   - Chọn ảnh hoặc văn bản thủy vân
+   - Chọn thuật toán thủy vân
+   - Điều chỉnh các tham số của thuật toán
+   - Xem ảnh đã nhúng thủy vân
+
+2. **Trích xuất thủy vân**:
+   - Tải ảnh đã nhúng thủy vân
+   - Trích xuất thông tin thủy vân
+   - Hiển thị thủy vân đã trích xuất
+
+3. **Đánh giá chất lượng**:
+   - PSNR (Peak Signal-to-Noise Ratio)
+   - Số pixel đã sửa đổi
+   - Độ chính xác trích xuất
+   - Thời gian xử lý
+
+4. **Lưu kết quả**:
+   - Lưu ảnh đã nhúng thủy vân
+   - Lưu thủy vân đã trích xuất
+   - Lưu báo cáo kết quả

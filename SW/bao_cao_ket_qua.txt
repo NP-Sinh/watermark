@@ -1,0 +1,18 @@
+BÁO CÁO KẾT QUẢ THỦY VÂN SW
+============================
+
+Ảnh gốc: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/cover.png - 2912x1632 pixels
+Ảnh thủy vân: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/watermark.jpg - 300x100 pixels
+
+THÔNG SỐ THUẬT TOÁN
+- Kích thước khối: 8x8
+- Số khối ảnh: 74256
+- Ước tính dung lượng nhúng: 74256 bits
+
+KẾT QUẢ
+- Số bit đã nhúng thành công: 30000/30000 (100.00%)
+- Thời gian nhúng thủy vân: 4.207 giây
+- Thời gian trích xuất thủy vân: 0.188 giây
+- PSNR: 71.09 dB
+- Số pixel đã sửa đổi: 24031/4752384 (0.5057%)
+- Độ chính xác trích xuất: 100.00% (0 bit lỗi)

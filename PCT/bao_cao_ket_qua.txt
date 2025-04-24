@@ -1,0 +1,18 @@
+BÁO CÁO KẾT QUẢ THỦY VÂN PCT
+===============================
+
+Ảnh gốc: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/cover.png - 2912x1632 pixels
+Ảnh thủy vân: D:/2024/Nam4HK2/BaoMatMMT/watermarking-app/watermark/watermark.jpg - 300x100 pixels
+
+THÔNG SỐ THUẬT TOÁN
+- Kích thước khối: 8x8
+- Số bit nhúng mỗi khối: 3
+- Số khối ảnh: 74256
+- Dung lượng tối đa có thể nhúng: 222768 bits (27846 bytes)
+
+KẾT QUẢ
+- Thời gian nhúng thủy vân: 0.501 giây
+- Thời gian trích xuất thủy vân: 0.376 giây
+- PSNR: 75.02 dB
+- Số pixel đã sửa đổi: 9724/4752384 (0.2046%)
+- Độ chính xác trích xuất: 100.00% (0 bit lỗi)

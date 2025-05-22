@@ -1,3 +1,4 @@
+# Đề tài 22
 # Digital Watermarking App
 
 Nghiên cứu kỹ thuật thủy vân số và xây dựng ứng dụng bảo vệ bản quyền ảnh số
@@ -55,24 +56,13 @@ Thuật toán LSB là phương pháp giấu thông tin vào bit ít quan trọng
 2. "Đặt cờ": Xác định xem có cần đảo bit thông điệp hay không trước khi nhúng
 3. "Nhúng thông tin": Thay đổi bit cuối cùng (LSB) của từng byte màu (thường là kênh Blue) trong ảnh
 4. "Đánh dấu EOF": Sử dụng marker để xác định kết thúc thông điệp khi trích xuất
-
-## Ưu điểm
-- Đơn giản, dễ cài đặt
-- Khả năng giấu lượng thông tin lớn (có thể lên đến 1/8 kích thước ảnh)
-- Thay đổi rất nhỏ về mặt thị giác (PSNR cao)
-
-## Hạn chế
-- Dễ bị phát hiện bằng phân tích thống kê
-- Không chống được với nén mất dữ liệu (JPEG, ...)
-- Không chống được với các biến đổi hình học (xoay, cắt, ...)
-
-Đây là thuật toán cơ bản, nhưng hiệu quả cho các ứng dụng steganography đơn giản. Tuy nhiên, trong môi trường thực, thường cần kết hợp với các phương pháp khác để tăng tính bảo mật.
 ```
 
 ## 🏷️Thuật toán SW
 
 ## 🏷️Thuật toán WU-LEE
-
+## 🏷️Thuật toán DCT
+## 🏷️Thuật toán DWT
 ## Các chức năng của ứng dụng
 1. **Nhúng thủy vân**:
    - Chọn ảnh gốc

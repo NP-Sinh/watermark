@@ -11,8 +11,8 @@ THÔNG SỐ THUẬT TOÁN
 - Dung lượng tối đa có thể nhúng: 222768 bits (27846 bytes)
 
 KẾT QUẢ
-- Thời gian nhúng thủy vân: 0.485 giây
-- Thời gian trích xuất thủy vân: 0.381 giây
-- PSNR: 75.04 dB
-- Số pixel đã sửa đổi: 9677/4752384 (0.2036%)
+- Thời gian nhúng thủy vân: 0.473 giây
+- Thời gian trích xuất thủy vân: 0.385 giây
+- PSNR: 74.99 dB
+- Số pixel đã sửa đổi: 9787/4752384 (0.2059%)
 - Độ chính xác trích xuất: 100.00% (0 bit lỗi)

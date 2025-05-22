@@ -10,7 +10,7 @@ THÔNG TIN ĐẦU VÀO
 THÔNG SỐ THUẬT TOÁN
 -----------------
 - Kích thước khối: 8x8
-- Hệ số k: 40
+- Hệ số k: 20
 - Vị trí hệ số 1: (4, 3)
 - Vị trí hệ số 2: (3, 4)
 
@@ -20,14 +20,14 @@ KẾT QUẢ
 - Ảnh thủy vân trích xuất: DCT\thuy_van_trich_xuat.png
 - Số khối đã nhúng: 30000/469
 - Số bit đã nhúng: 30000/30000
-- Số pixel đã sửa đổi: 1564358/4752384 (32.9173%)
-- PSNR: 39.04 dB
-- Độ chính xác trích xuất: 72.82% (8154 bit lỗi)
+- Số pixel đã sửa đổi: 1427086/4752384 (30.0288%)
+- PSNR: 41.98 dB
+- Độ chính xác trích xuất: 72.40% (8279 bit lỗi)
 
 HIỆU SUẤT
 --------
-- Thời gian nhúng: 1.225 giây
-- Thời gian trích xuất: 0.255 giây
-- Tổng thời gian: 1.856 giây
+- Thời gian nhúng: 1.226 giây
+- Thời gian trích xuất: 0.247 giây
+- Tổng thời gian: 1.821 giây
 
 ===============================

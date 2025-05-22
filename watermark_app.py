@@ -11,7 +11,7 @@ import threading
 import time
 import matplotlib.pyplot as plt
 
-# Import watermarking algorithms
+# Import phương pháp
 from pct_watermark import apply_watermark_to_files as apply_pct_watermark
 from wu_lee_watermark import apply_watermark_to_files as apply_wulee_watermark
 from sw_watermark import apply_watermark_to_files as apply_sw_watermark

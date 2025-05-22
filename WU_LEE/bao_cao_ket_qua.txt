@@ -14,8 +14,8 @@ THÔNG SỐ THUẬT TOÁN
 
 KẾT QUẢ
 - Số bit đã nhúng thành công: 30000/30000 (100.00%)
-- Thời gian nhúng thủy vân: 0.389 giây
-- Thời gian trích xuất thủy vân: 0.251 giây
+- Thời gian nhúng thủy vân: 0.396 giây
+- Thời gian trích xuất thủy vân: 0.256 giây
 - PSNR: 71.17 dB
 - Số pixel đã sửa đổi: 23618/4752384 (0.4970%)
 - Độ chính xác trích xuất: 89.33% (3200 bit lỗi)

@@ -22,7 +22,7 @@ Kết quả:
 - Độ chính xác trích xuất: 100.00%
 
 Hiệu suất:
-- Thời gian nhúng thủy vân: 0.403760 giây
-- Thời gian trích xuất thủy vân: 0.174253 giây
+- Thời gian nhúng thủy vân: 0.404138 giây
+- Thời gian trích xuất thủy vân: 0.178824 giây
 
 ===================================
